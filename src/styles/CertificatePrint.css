@@ -1,0 +1,77 @@
+/* Ensure A4 portrait size printing */
+@media print {
+    @page {
+      size: A4 portrait; /* Ensure A4 portrait orientation */
+      margin: 0; /* Remove margin to use the whole page */
+    }
+  
+    body {
+      margin: 0;
+      padding: 0;
+    }
+  
+    .no-print {
+      display: none; /* Hide elements like buttons in print */
+    }
+  
+    .certificate-wrapper {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      background-image: url("../assets/Cert.png");
+      background-size: contain; /* Ensure background image fits the page */
+      background-repeat: no-repeat;
+      background-position: center;
+      page-break-before: always; /* Ensure it starts on a new page */
+    }
+  
+    .certificate-template {
+      width: 100%;
+      height: 100%;
+      object-fit: cover; /* This will ensure the image covers the page */
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
+  
+    .certificate-content {
+      position: absolute;
+      top: 40%; /* Adjust to center content vertically */
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+      font-size: 20px;
+      font-family: 'Times New Roman', serif;
+      color: black;
+      width: 80%;
+      max-width: 800px;
+      line-height: 1.5;
+      z-index: 1; /* Ensure content is above the background */
+    }
+  
+    .certificate-content p {
+      margin: 5px 0;
+    }
+  }
+
+  /* Ensure only the certificate prints */
+@media print {
+    body * {
+      visibility: hidden; /* Hide all elements */
+    }
+  
+    .cert-container, .cert-container * {
+      visibility: visible; /* Make certificate content visible */
+    }
+  
+    .cert-container {
+      position: absolute; /* Ensure it's the only visible content */
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+  }
+  
+  

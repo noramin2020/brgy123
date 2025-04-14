@@ -1,0 +1,73 @@
+/* NameForm.css */
+.form-container {
+  max-width: 1000px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  font-family: "Segoe UI", sans-serif;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+}
+
+.form-grid div {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #333;
+}
+
+input,
+select {
+  padding: 10px;
+  font-size: 15px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  transition: border-color 0.3s ease;
+}
+
+input:focus,
+select:focus {
+  border-color: #0e63ff;
+  outline: none;
+}
+
+.submit-container {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+button {
+  padding: 12px 32px;
+  font-size: 16px;
+  background-color: #0e63ff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #0944b3;
+}
+
+/* Responsive tweaks */
+@media (max-width: 600px) {
+  .form-container {
+    padding: 1rem;
+  }
+
+  button {
+    width: 100%;
+  }
+}

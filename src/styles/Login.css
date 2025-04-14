@@ -1,0 +1,142 @@
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f0f2f5;
+  position: relative; /* Allow the loading overlay to be positioned relative to this container */
+  transition: all 0.3s ease-in-out; /* Smooth transition for background effect */
+}
+
+/* Create the blurry background effect when loading */
+.login-container.loading-active {
+  background-color: rgba(0, 0, 0, 0.5); /* Darken the background when loading */
+}
+
+.login-container.loading-active::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.3); /* Darken the background */
+  backdrop-filter: blur(10px); /* Apply blur effect */
+  z-index: 5; /* Ensure it appears behind the loading icon but in front of other content */
+}
+
+.login-box {
+  display: flex;
+  width: 80%;
+  max-width: 1000px;
+  background-color: #fff;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Make image take more space */
+.login-left {
+  flex: 2;
+}
+
+.login-left img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.login-right {
+  flex: 1;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+}
+
+.login-logo {
+  width: 120px;
+  margin: 0 auto 20px;
+  display: block;
+}
+
+.login-right h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.login-right form > div {
+  margin-bottom: 15px;
+}
+
+.login-right label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.login-right input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.login-right button {
+  width: 100%;
+  padding: 10px;
+  background-color: #057909;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.login-right button:hover {
+  background-color: #0056b3;
+}
+
+/* Loading icon styling */
+.loading-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: absolute; /* Position it absolutely within the login container */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* Center it */
+  z-index: 10; /* Ensure it stays above other content */
+}
+
+.loading-icon {
+  width: 60px; /* Adjust the size of your loading icon */
+  height: 60px;
+  margin-bottom: 8px;
+  animation: spin 2s linear infinite; /* Slower spinning animation */
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.stopped {
+  animation: none; /* Stop the animation */
+}
+.error-popup {
+  background-color: #ffcccc;
+  color: #ff0000;
+  padding: 10px;
+  margin-top: 10px;
+  text-align: center;
+  border-radius: 5px;
+  font-size: 14px;
+}
