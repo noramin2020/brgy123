@@ -1,18 +1,38 @@
-// Sidebar.jsx
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars } from "@fortawesome/free-solid-svg-icons"; // hamburger icon
-import "../styles/sidebar.css"; // make sure your CSS defines the drawer behavior
+import { faBars } from "@fortawesome/free-solid-svg-icons";
+import "../styles/sidebar.css";
+import Logo from "../assets/logo1.png";
+import axios from "axios";
 
 const Sidebar = ({ onSidebarToggle }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const UserType = localStorage.getItem("UserType"); // Get UserType from localStorage
+  const [first_name, setfirst_name] = useState("");
+  const [last_name, setlast_name] = useState("");
+  const UserType = localStorage.getItem("UserType");
+  const IDNumber = localStorage.getItem("IDNumber");
+
+  useEffect(() => {
+    if (!IDNumber) return;
+
+    axios.get(`http://localhost:5000/user/${IDNumber}`)
+      .then((res) => {
+        if (res.data && res.data.length > 0) {
+          const login = res.data[0];
+          setfirst_name(login.first_name || "");
+          setlast_name(login.last_name || "");
+        }
+      })
+      .catch((err) => {
+        console.error("Error fetching issuer data:", err);
+      });
+  }, [IDNumber]);
 
   const handleSidebarToggle = () => {
     const newState = !isOpen;
     setIsOpen(newState);
-    onSidebarToggle(newState); // Notify parent of the new state
+    onSidebarToggle(newState);
   };
 
   return (
@@ -27,7 +47,12 @@ const Sidebar = ({ onSidebarToggle }) => {
 
       {/* Sidebar Drawer */}
       <div className={`sidebar-drawer ${isOpen ? "open" : ""}`}>
-        <h2>Dashboard</h2>
+        {/* Logo and Welcome Section */}
+        <div className="sidebar-header">
+          <img src={Logo} alt="Logo" className="sidebar-logo" />
+          <p>Welcome </p>
+          <h5><strong>{first_name} {last_name}</strong></h5>
+        </div>
         <ul>
           {/* Admin and Official Sidebar Links */}
           {(UserType === "admin" || UserType === "official") && (
@@ -36,11 +61,9 @@ const Sidebar = ({ onSidebarToggle }) => {
               <li><Link to="/addname">Add Name</Link></li>
               <li><Link to="/name">Names</Link></li>
               <li><Link to="/loginname">Account</Link></li>
-              <li><Link to="/MyInfo">Other info</Link></li>
               <li><Link to="/cert">Cert</Link></li>
-              <li><Link to="/Qr">Qr code</Link></li>
               <li><Link to="/indigent">Indigent</Link></li>
-              
+              <li><Link to="/Qr">Qr code</Link></li>
             </>
           )}
 
@@ -49,7 +72,7 @@ const Sidebar = ({ onSidebarToggle }) => {
             <>
               <li><Link to="/userhome">Home</Link></li>
               <li><Link to="/cert">Cert</Link></li>
-              <li><Link to="/MyInfo">Other info</Link></li>
+              <li><Link to="/indigent">Indigent</Link></li>
             </>
           )}
 

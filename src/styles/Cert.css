@@ -206,3 +206,17 @@ text-align: justify;
   font-style: italic;
   margin-bottom: 8px;
 }
+
+button {
+  background-color: #057909;
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  margin-bottom: 15px;
+}
+
+
+button:hover {
+  background-color: #024405;
+}

@@ -1,89 +1,255 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import PinfoModal from "../Modal/pinfomodal";
+import IinfoModal from "../Modal/iinfomodal"; // Import income info modal
+import "../styles/pages.css"; // Assuming shared CSS styles for consistency
+import image from "../assets/Profile.jpg";
 
-function ImageUpload() {
-  const [accountId, setAccountId] = useState(localStorage.getItem("IDNumber")); // Get logged-in user's ID
-  const [image, setImage] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [imageUrl, setImageUrl] = useState(null); // Store the image URL
+function InfoRecordsPage() {
+  const [userData, setUserData] = useState(null); // To store user data (name, etc.)
+  const [pinfo, setPinfo] = useState(null);
+  const [incomeInfo, setIncomeInfo] = useState(null);
+  const [pinfoModalOpen, setPinfoModalOpen] = useState(false);
+  const [incomeModalOpen, setIncomeModalOpen] = useState(false); // state for income modal
+  const [loadingPinfo, setLoadingPinfo] = useState(false); // loading state for personal info
+  const [loadingIncome, setLoadingIncome] = useState(false); // loading state for income info
+  const [userImage, setUserImage] = useState(null);
+
+  const account_id = localStorage.getItem("IDNumber"); // get logged-in user's ID
 
   useEffect(() => {
-    fetchImage();
-  }, [accountId]);
+    fetchUserData();
+    fetchUserPinfo();
+    fetchIncomeInfo();
+    fetchUserImage();
+  }, [account_id]);
 
-  // Fetch the image from the backend
-  const fetchImage = async () => {
+  // Fetch user basic data
+  const fetchUserData = async () => {
+    if (!account_id) {
+      alert("Account ID is missing.");
+      return;
+    }
+  
     try {
-      const response = await axios.get(`http://localhost:5000/image/${accountId}`);
-      if (response.data.imageUrl) {
-        setImageUrl(response.data.imageUrl); // Set the image URL
+      const response = await axios.get(`http://localhost:5000/name/${account_id}`);
+      if (response.data && response.data.length > 0) {
+        setUserData(response.data[0]); // Assuming the response is an array, we select the first element
       } else {
-        setImageUrl(null); // Reset if no image URL is returned
+        alert("No user data found.");
+      }
+    } catch (err) {
+      console.error("Error fetching user data:", err);
+      alert("Failed to fetch user data.");
+    }
+  };
+
+  // Fetch user personal info
+  const fetchUserPinfo = async () => {
+    setLoadingPinfo(true);
+    try {
+      const response = await axios.get(`http://localhost:5000/userpinfo/${account_id}`);
+      setPinfo(response.data);
+    } catch (err) {
+      console.error(err);
+      if (err.response?.status === 404) {
+        setPinfo(null); // No data found
+      } else {
+        alert("Failed to fetch personal info.");
+      }
+    } finally {
+      setLoadingPinfo(false);
+    }
+  };
+
+  // Fetch income information
+  const fetchIncomeInfo = async () => {
+    setLoadingIncome(true);
+    try {
+      const response = await axios.get(`http://localhost:5000/i_info/${account_id}`);
+      setIncomeInfo(response.data);
+    } catch (err) {
+      console.error(err);
+      if (err.response?.status === 404) {
+        setIncomeInfo(null); // No data found
+      } else {
+        alert("Failed to fetch income info.");
+      }
+    } finally {
+      setLoadingIncome(false);
+    }
+  };
+
+  // Save personal info
+  const handleSavePinfo = async (formData) => {
+    try {
+      const payload = { ...formData, account_id };
+      const response = await axios.post("http://localhost:5000/userpinfo/add", payload);
+      alert(response.data.message || "Saved successfully");
+      fetchUserPinfo();
+      setPinfoModalOpen(false);
+    } catch (err) {
+      console.error(err);
+      alert(err.response?.data?.message || "Failed to save personal info");
+    }
+  };
+
+  // Save income info
+  const handleSaveIncomeInfo = async (formData) => {
+    try {
+      const payload = { ...formData, account_id };
+      const response = await axios.post("http://localhost:5000/i_info/add", payload);
+      alert(response.data.message || "Saved successfully");
+      fetchIncomeInfo();
+      setIncomeModalOpen(false);
+    } catch (err) {
+      console.error(err);
+      alert(err.response?.data?.message || "Failed to save income info");
+    }
+  };
+
+  const fetchUserImage = async () => {
+    try {
+      const response = await axios.get(`http://localhost:5000/image/${account_id}`);
+      if (response.data && response.data.img) {
+        setUserImage(response.data.img); // Assuming base64 image string
+      } else {
+        setUserImage(null);
       }
     } catch (err) {
       console.error("Error fetching image:", err);
-      setError("Failed to fetch image.");
+      setUserImage(null);
     }
   };
 
-  // Handle image upload
   const handleImageUpload = async (e) => {
-    e.preventDefault();
-    if (!image) {
-      alert("Please select an image to upload.");
-      return;
-    }
+    const file = e.target.files[0];
+    if (!file) return;
 
-    const formData = new FormData();
-    formData.append("img", image);
-    formData.append("account_id", accountId);
+    const reader = new FileReader();
+    reader.onloadend = async () => {
+      const base64Image = reader.result.split(",")[1]; // Remove the prefix
 
-    setLoading(true);
-    try {
-      const response = await axios.post("http://localhost:5000/image/add", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      alert(response.data.message || "Image uploaded successfully.");
-      fetchImage(); // Refresh the image after upload
-    } catch (err) {
-      console.error("Error uploading image:", err);
-      setError(err.response?.data?.message || "Failed to upload image.");
-    } finally {
-      setLoading(false);
-    }
+      try {
+        const response = await axios.post("http://localhost:5000/image/add", {
+          account_id,
+          img: base64Image,
+        });
+
+        alert(response.data.message || "Image uploaded successfully");
+        fetchUserImage(); // Refresh the image preview
+      } catch (error) {
+        console.error("Error uploading image:", error);
+        alert("Failed to upload image");
+      }
+    };
+
+    reader.readAsDataURL(file);
   };
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h1>Image Upload</h1>
-      <form onSubmit={handleImageUpload}>
-        <input
-          type="file"
-          accept="image/*"
-          onChange={(e) => setImage(e.target.files[0])}
-        />
-        <button type="submit" disabled={loading}>
-          {loading ? "Uploading..." : "Upload Image"}
-        </button>
-      </form>
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      {imageUrl && (
-        <div style={{ marginTop: "20px" }}>
-          <h2>Uploaded Image</h2>
-          <img
-            src={imageUrl} // Use the image URL returned from the backend
-            alt="Uploaded"
-            style={{ maxWidth: "300px", maxHeight: "300px" }}
-          />
+    <div className="info-records-container">
+      <div className="top-container">
+        {/* User Information Section on the Right */}
+        <div className="user-info-container">
+          {userData && (
+            <div className="info-section">
+              <h2>Logged-in User Information</h2>
+              <div>
+                <p><strong>Name:</strong> {`${userData.first_name} ${userData.middle_name} ${userData.last_name} ${userData.extension}`}</p>
+                <p><strong>Position:</strong> {userData.Position}</p>
+                <p><strong>Resident Type:</strong> {userData.ResidentType}</p>
+                <p><strong>House No:</strong> {userData.HouseNo}</p>
+                <p><strong>Zone No:</strong> {userData.ZoneNo}</p>
+                {/* Image Upload Button */}
+                <div className="upload-container">
+                  <label htmlFor="imageUpload" className="upload-button">
+                    {userImage ? "Change Image" : "Upload Image"}
+                  </label>
+                  <input
+                    id="imageUpload"
+                    type="file"
+                    accept="image/*"
+                    style={{ display: "none" }}
+                    onChange={handleImageUpload}
+                  />
+                </div>
+              </div>
+            </div>
+          )}
         </div>
-      )}
-      <Link to="/logout"><button>Logout</button></Link>
+
+        <img
+          src={userImage ? `data:image/jpeg;base64,${userImage}` : image}
+          alt="User Profile"
+          className="profile-image"
+        />
+      </div>
+
+      {/* Personal and Income Information Section Below */}
+      <div className="info-columns">
+        {/* Personal Information Section */}
+        <div className="info-column">
+          <h2>Your Personal Information</h2>
+          <button onClick={() => setPinfoModalOpen(true)}>{pinfo ? "Update" : "Add"}</button>
+
+          {loadingPinfo ? (
+            <p>Loading...</p>
+          ) : pinfo ? (
+            <div>
+              <p><strong>Gender:</strong> {pinfo.gender}</p>
+              <p><strong>Civil Status:</strong> {pinfo.c_status}</p>
+            </div>
+          ) : (
+            <div>
+              <p><strong>Gender:</strong></p>
+              <p><strong>Civil Status:</strong></p>
+            </div>
+          )}
+        </div>
+
+        {/* Income Information Section */}
+        <div className="info-column">
+          <h2>Your Income Information</h2>
+          <button onClick={() => setIncomeModalOpen(true)}>{incomeInfo ? "Update" : "Add"}</button>
+
+          {loadingIncome ? (
+            <p>Loading...</p>
+          ) : incomeInfo && incomeInfo.length > 0 ? (
+            <div>
+              {incomeInfo.map((info) => (
+                <div key={info.id}>
+                  <p><strong>Occupation:</strong> {info.occupation}</p>
+                  <p><strong>Income:</strong> {info.fmi}</p>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div>
+              <p><strong>Occupation:</strong></p>
+              <p><strong>Income:</strong></p>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Personal Information Modal */}
+      <PinfoModal
+        isOpen={pinfoModalOpen}
+        onClose={() => setPinfoModalOpen(false)}
+        onAdd={handleSavePinfo}
+        initialData={pinfo}
+      />
+
+      {/* Income Information Modal */}
+      <IinfoModal
+        isOpen={incomeModalOpen}
+        onClose={() => setIncomeModalOpen(false)}
+        onAdd={handleSaveIncomeInfo}
+        initialData={incomeInfo ? incomeInfo[0] : null}
+      />
     </div>
   );
 }
 
-export default ImageUpload;
+export default InfoRecordsPage;

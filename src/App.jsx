@@ -118,7 +118,7 @@ function App() {
           path="/Qr"
           element={
             // Here, requiredUsertype="any" is used to let all user types access this route
-            <ProtectedRoute requiredUsertype="any">
+            <ProtectedRoute requiredUsertype="official">
               <SidebarLayout>
                 <Qr />
               </SidebarLayout>
