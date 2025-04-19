@@ -18,11 +18,19 @@ function Login() {
   const [loginError, setLoginError] = useState(false);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    const { name, value, checked } = e.target;
+    if (name === "UserType") {
+      // Handle checkboxes for UserType (only one should be selected)
+      setFormData((prev) => ({
+        ...prev,
+        UserType: checked ? value : "",
+      }));
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
   };
 
   const handleSubmit = (e) => {
@@ -50,11 +58,6 @@ function Login() {
           localStorage.setItem("isLoggedIn", "true");
           localStorage.setItem("IDNumber", data.user.IDNumber);
           localStorage.setItem("UserType", data.user.UserType);
-          
-  
-
-
-
 
           // Redirect based on usertype
           switch (data.user.UserType) {
@@ -119,19 +122,41 @@ function Login() {
             </div>
 
             <div>
-              <label htmlFor="UserType">Usertype:</label>
-              <select
-                name="UserType"
-                value={formData.UserType}
-                onChange={handleChange}
-                required
-              >
-                <option value="">Select Usertype</option>
-                <option value="official">Official</option>
-                <option value="admin">Admin</option>
-                <option value="user">User</option>
-              </select>
-            </div>
+  <label>User Type:</label>
+  <div className="checkbox-group">
+    <div>
+      <input
+        type="checkbox"
+        name="UserType"
+        value="admin"
+        checked={formData.UserType === "admin"}
+        onChange={handleChange}
+      />
+      <label>Admin</label>
+    </div>
+    <div>
+      <input
+        type="checkbox"
+        name="UserType"
+        value="official"
+        checked={formData.UserType === "official"}
+        onChange={handleChange}
+      />
+      <label>Official</label>
+    </div>
+    <div>
+      <input
+        type="checkbox"
+        name="UserType"
+        value="user"
+        checked={formData.UserType === "user"}
+        onChange={handleChange}
+      />
+      <label>User</label>
+    </div>
+  </div>
+</div>
+
 
             {loading ? (
               <div className="loading-wrapper">

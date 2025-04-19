@@ -183,10 +183,11 @@ const [ZoneNo, setZoneNo] = useState("");
 </div>
 <div className="qrcode">
             <h3>Do not accept if no QR code and Dry Seal of the Barangay</h3>
+            
             <QRCode
               value={encryptedQRCodeValue}
               size={100}
-              fgColor="#008000"
+              fgColor="#000000"
               bgColor="#ffffff"
               level="H"
               includeMargin={true}
@@ -202,6 +203,7 @@ const [ZoneNo, setZoneNo] = useState("");
           </div>
 
           <div className="issuer-info">
+          <h4>Decrypt the Qrcode Using the rorogApp</h4>
           <h1>Proccess By:</h1>
             <h2>{issuerfirst_name && issuerlast_name ? `${issuerfirst_name} ${issuerlast_name}` : "Loading..."}</h2>
             <h3>{issuerPosition ? issuerPosition : "Loading..."}</h3>

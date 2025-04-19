@@ -1,40 +1,42 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import PinfoModal from "../Modal/pinfomodal";
-import IinfoModal from "../Modal/iinfomodal"; // Import income info modal
-import "../styles/pages.css"; // Assuming shared CSS styles for consistency
-import image from "../assets/Profile.jpg";
+import IinfoModal from "../Modal/iinfomodal";
+import CinfoModal from "../Modal/cinfomodal"; 
+import "../styles/pages.css";
+import ImageUpload from "../components/image"; // adjust path if needed
 
 function InfoRecordsPage() {
-  const [userData, setUserData] = useState(null); // To store user data (name, etc.)
+  const [userData, setUserData] = useState(null);
   const [pinfo, setPinfo] = useState(null);
   const [incomeInfo, setIncomeInfo] = useState(null);
+  const [cinfo, setCinfo] = useState(null);
   const [pinfoModalOpen, setPinfoModalOpen] = useState(false);
-  const [incomeModalOpen, setIncomeModalOpen] = useState(false); // state for income modal
-  const [loadingPinfo, setLoadingPinfo] = useState(false); // loading state for personal info
-  const [loadingIncome, setLoadingIncome] = useState(false); // loading state for income info
-  const [userImage, setUserImage] = useState(null);
+  const [incomeModalOpen, setIncomeModalOpen] = useState(false);
+  const [cinfoModalOpen, setCinfoModalOpen] = useState(false);
+  const [loadingPinfo, setLoadingPinfo] = useState(false);
+  const [loadingIncome, setLoadingIncome] = useState(false);
+  const [loadingCinfo, setLoadingCinfo] = useState(false);
 
-  const account_id = localStorage.getItem("IDNumber"); // get logged-in user's ID
+  const account_id = localStorage.getItem("IDNumber");
 
   useEffect(() => {
     fetchUserData();
     fetchUserPinfo();
     fetchIncomeInfo();
-    fetchUserImage();
+    fetchUserCinfo();
   }, [account_id]);
 
-  // Fetch user basic data
   const fetchUserData = async () => {
     if (!account_id) {
       alert("Account ID is missing.");
       return;
     }
-  
+
     try {
       const response = await axios.get(`http://localhost:5000/name/${account_id}`);
-      if (response.data && response.data.length > 0) {
-        setUserData(response.data[0]); // Assuming the response is an array, we select the first element
+      if (response.data?.length > 0) {
+        setUserData(response.data[0]);
       } else {
         alert("No user data found.");
       }
@@ -44,7 +46,6 @@ function InfoRecordsPage() {
     }
   };
 
-  // Fetch user personal info
   const fetchUserPinfo = async () => {
     setLoadingPinfo(true);
     try {
@@ -52,17 +53,12 @@ function InfoRecordsPage() {
       setPinfo(response.data);
     } catch (err) {
       console.error(err);
-      if (err.response?.status === 404) {
-        setPinfo(null); // No data found
-      } else {
-        alert("Failed to fetch personal info.");
-      }
+      setPinfo(null);
     } finally {
       setLoadingPinfo(false);
     }
   };
 
-  // Fetch income information
   const fetchIncomeInfo = async () => {
     setLoadingIncome(true);
     try {
@@ -70,17 +66,33 @@ function InfoRecordsPage() {
       setIncomeInfo(response.data);
     } catch (err) {
       console.error(err);
-      if (err.response?.status === 404) {
-        setIncomeInfo(null); // No data found
-      } else {
-        alert("Failed to fetch income info.");
-      }
+      setIncomeInfo(null);
     } finally {
       setLoadingIncome(false);
     }
   };
 
-  // Save personal info
+  const fetchUserCinfo = async () => {
+    setLoadingCinfo(true);
+    try {
+      const response = await axios.get(`http://localhost:5000/usercinfo/${account_id}`);
+      const data = response.data;
+
+      if (Array.isArray(data)) {
+        setCinfo(data);
+      } else if (data) {
+        setCinfo([data]); // wrap single object in array
+      } else {
+        setCinfo([]);
+      }
+    } catch (err) {
+      console.error(err);
+      setCinfo([]);
+    } finally {
+      setLoadingCinfo(false);
+    }
+  };
+
   const handleSavePinfo = async (formData) => {
     try {
       const payload = { ...formData, account_id };
@@ -90,11 +102,10 @@ function InfoRecordsPage() {
       setPinfoModalOpen(false);
     } catch (err) {
       console.error(err);
-      alert(err.response?.data?.message || "Failed to save personal info");
+      alert("Failed to save personal info");
     }
   };
 
-  // Save income info
   const handleSaveIncomeInfo = async (formData) => {
     try {
       const payload = { ...formData, account_id };
@@ -104,95 +115,48 @@ function InfoRecordsPage() {
       setIncomeModalOpen(false);
     } catch (err) {
       console.error(err);
-      alert(err.response?.data?.message || "Failed to save income info");
+      alert("Failed to save income info");
     }
   };
 
-  const fetchUserImage = async () => {
+  const handleSaveCinfo = async (formData) => {
     try {
-      const response = await axios.get(`http://localhost:5000/image/${account_id}`);
-      if (response.data && response.data.img) {
-        setUserImage(response.data.img); // Assuming base64 image string
-      } else {
-        setUserImage(null);
-      }
+      const payload = { ...formData, account_id };
+      const response = await axios.post("http://localhost:5000/usercinfo/add", payload);
+      alert(response.data.message || "Saved successfully");
+      fetchUserCinfo();
+      setCinfoModalOpen(false);
     } catch (err) {
-      console.error("Error fetching image:", err);
-      setUserImage(null);
+      console.error(err);
+      alert("Failed to save contact info");
     }
-  };
-
-  const handleImageUpload = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onloadend = async () => {
-      const base64Image = reader.result.split(",")[1]; // Remove the prefix
-
-      try {
-        const response = await axios.post("http://localhost:5000/image/add", {
-          account_id,
-          img: base64Image,
-        });
-
-        alert(response.data.message || "Image uploaded successfully");
-        fetchUserImage(); // Refresh the image preview
-      } catch (error) {
-        console.error("Error uploading image:", error);
-        alert("Failed to upload image");
-      }
-    };
-
-    reader.readAsDataURL(file);
   };
 
   return (
     <div className="info-records-container">
       <div className="top-container">
-        {/* User Information Section on the Right */}
+        <div>
+          <ImageUpload accountId={account_id} />
+        </div>
         <div className="user-info-container">
           {userData && (
             <div className="info-section">
               <h2>Logged-in User Information</h2>
-              <div>
-                <p><strong>Name:</strong> {`${userData.first_name} ${userData.middle_name} ${userData.last_name} ${userData.extension}`}</p>
-                <p><strong>Position:</strong> {userData.Position}</p>
-                <p><strong>Resident Type:</strong> {userData.ResidentType}</p>
-                <p><strong>House No:</strong> {userData.HouseNo}</p>
-                <p><strong>Zone No:</strong> {userData.ZoneNo}</p>
-                {/* Image Upload Button */}
-                <div className="upload-container">
-                  <label htmlFor="imageUpload" className="upload-button">
-                    {userImage ? "Change Image" : "Upload Image"}
-                  </label>
-                  <input
-                    id="imageUpload"
-                    type="file"
-                    accept="image/*"
-                    style={{ display: "none" }}
-                    onChange={handleImageUpload}
-                  />
-                </div>
-              </div>
+              <p><strong>Name:</strong> {`${userData.first_name} ${userData.middle_name} ${userData.last_name} ${userData.extension}`}</p>
+              <p><strong>Position:</strong> {userData.Position}</p>
+              <p><strong>Resident Type:</strong> {userData.ResidentType}</p>
+              <p><strong>House No:</strong> {userData.HouseNo}</p>
+              <p><strong>Zone No:</strong> {userData.ZoneNo}</p>
+              
             </div>
           )}
         </div>
-
-        <img
-          src={userImage ? `data:image/jpeg;base64,${userImage}` : image}
-          alt="User Profile"
-          className="profile-image"
-        />
       </div>
 
-      {/* Personal and Income Information Section Below */}
       <div className="info-columns">
-        {/* Personal Information Section */}
         <div className="info-column">
           <h2>Your Personal Information</h2>
           <button onClick={() => setPinfoModalOpen(true)}>{pinfo ? "Update" : "Add"}</button>
-
           {loadingPinfo ? (
             <p>Loading...</p>
           ) : pinfo ? (
@@ -201,39 +165,45 @@ function InfoRecordsPage() {
               <p><strong>Civil Status:</strong> {pinfo.c_status}</p>
             </div>
           ) : (
-            <div>
-              <p><strong>Gender:</strong></p>
-              <p><strong>Civil Status:</strong></p>
-            </div>
+            <p>No Personal information available.</p>
           )}
         </div>
 
-        {/* Income Information Section */}
         <div className="info-column">
           <h2>Your Income Information</h2>
           <button onClick={() => setIncomeModalOpen(true)}>{incomeInfo ? "Update" : "Add"}</button>
-
           {loadingIncome ? (
             <p>Loading...</p>
-          ) : incomeInfo && incomeInfo.length > 0 ? (
-            <div>
-              {incomeInfo.map((info) => (
-                <div key={info.id}>
-                  <p><strong>Occupation:</strong> {info.occupation}</p>
-                  <p><strong>Income:</strong> {info.fmi}</p>
-                </div>
-              ))}
-            </div>
+          ) : incomeInfo?.length > 0 ? (
+            incomeInfo.map((info) => (
+              <div key={info.id}>
+                <p><strong>Occupation:</strong> {info.occupation}</p>
+                <p><strong>Income:</strong> {info.fmi}</p>
+              </div>
+            ))
           ) : (
-            <div>
-              <p><strong>Occupation:</strong></p>
-              <p><strong>Income:</strong></p>
-            </div>
+            <p>No Income information available.</p>
+          )}
+        </div>
+
+        <div className="info-column">
+          <h2>Your Contact Information</h2>
+          <button onClick={() => setCinfoModalOpen(true)}>{cinfo ? "Update" : "Add"}</button>
+          {loadingCinfo ? (
+            <p>Loading...</p>
+          ) : cinfo?.length > 0 ? (
+            cinfo.map((info) => (
+              <div key={info.id}>
+                <p><strong>Gmail:</strong> {info.gmail}</p>
+                <p><strong>Contact #:</strong> {info.c_no}</p>
+              </div>
+            ))
+          ) : (
+            <p>No contact information available.</p>
           )}
         </div>
       </div>
 
-      {/* Personal Information Modal */}
       <PinfoModal
         isOpen={pinfoModalOpen}
         onClose={() => setPinfoModalOpen(false)}
@@ -241,12 +211,18 @@ function InfoRecordsPage() {
         initialData={pinfo}
       />
 
-      {/* Income Information Modal */}
       <IinfoModal
         isOpen={incomeModalOpen}
         onClose={() => setIncomeModalOpen(false)}
         onAdd={handleSaveIncomeInfo}
         initialData={incomeInfo ? incomeInfo[0] : null}
+      />
+
+      <CinfoModal
+        isOpen={cinfoModalOpen}
+        onClose={() => setCinfoModalOpen(false)}
+        onAdd={handleSaveCinfo}
+        initialData={cinfo ? cinfo[0] : null}
       />
     </div>
   );

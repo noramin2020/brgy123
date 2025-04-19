@@ -213,7 +213,7 @@ const Indigent = () => {
     <QRCode
       value={encryptedQRCodeValue}
       size={100}
-      fgColor="#008000"
+      fgColor="#000000"
       bgColor="#ffffff"
       level="H"
       includeMargin={true}

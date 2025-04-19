@@ -5,6 +5,7 @@
     margin: 0 auto; /* Center the content horizontally */
     padding: 20px;
     transition: margin-left 0.3s ease;
+    font-family: 'Helvetica Neue', Arial, sans-serif; /* Unified font style */
 }
 
 /* When the sidebar is open, shift the container to the right */
@@ -24,6 +25,7 @@
     color: red;
     font-size: 14px;
     margin-bottom: 10px;
+    font-family: 'Helvetica Neue', Arial, sans-serif; /* Consistent font */
 }
 
 /* Table styles for both pages */
@@ -32,6 +34,7 @@
     width: 100%;
     max-width: 100%;
     border-collapse: collapse;
+    font-family: 'Helvetica Neue', Arial, sans-serif; /* Consistent font */
 }
 
 .records-table th,
@@ -41,6 +44,7 @@
     padding: 10px;
     border: 1px solid #ddd;
     text-align: left;
+    font-family: 'Helvetica Neue', Arial, sans-serif; /* Consistent font */
 }
 
 .records-table th,
@@ -101,6 +105,7 @@
   flex-direction: column;
   gap: 20px;
   padding: 20px;
+  font-family: 'Helvetica Neue', Arial, sans-serif; /* Consistent font */
 }
 
 .top-container {
@@ -109,60 +114,62 @@
     align-items: center;
     gap: 20px;
     flex-wrap: wrap;
-  }
-  
-  .image-container {
+}
+
+.image-container {
     width: 250px; /* Set a fixed width for the image container */
     height: 250px; /* Set a fixed height for the image container */
     overflow: hidden; /* Ensure the image doesn’t overflow the container */
     border-radius: 10px; /* Optional: rounded corners for the image container */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: add a shadow to the image container */
-  }
-  
-  .image-container img {
+}
+
+.image-container img {
     width: 100%; /* Make the image fill the container */
     height: 100%; /* Ensure the image covers the height of the container */
     object-fit: cover; /* Preserve aspect ratio and cover the whole container */
-  }
-  
-  .user-info-container {
+}
+
+.user-info-container {
     flex: 1; /* Allow the user info to take up the remaining space */
-  }
-  
-  @media (max-width: 768px) {
+    font-family: 'Helvetica Neue', Arial, sans-serif; /* Consistent font */
+}
+
+@media (max-width: 768px) {
     .top-container {
       flex-direction: column;
       align-items: flex-start;
     }
-  
+
     .image-container {
       width: 150px; /* Optionally reduce size on smaller screens */
       height: 150px; /* Optionally reduce size on smaller screens */
       margin-bottom: 20px; /* Add space between image and user info */
     }
-  
+
     .user-info-container {
       text-align: left;
     }
-  }
-  
-  @media (max-width: 480px) {
+}
+
+@media (max-width: 480px) {
     .top-container {
       gap: 10px;
     }
-  
+
     .image-container {
       width: 120px; /* Further reduce image size on very small screens */
       height: 120px; /* Further reduce image size */
     }
-  }
-  
+}
+
 /* User Info Section */
 .user-info-container {
   width: 65%; /* Adjust width as needed */
   background-color: #f4f4f4;
   padding: 15px;
   border-radius: 8px;
+  font-family: 'Helvetica Neue', Arial, sans-serif; /* Consistent font */
 }
 
 /* Info Columns for Personal and Income Information */
@@ -176,24 +183,28 @@
   background: #f4f4f4;
   padding: 15px;
   border-radius: 8px;
+  font-family: 'Helvetica Neue', Arial, sans-serif; /* Consistent font */
 }
 
 h2 {
   color: #333;
   font-size: 1.5rem;
+  font-family: 'Helvetica Neue', Arial, sans-serif; /* Consistent font */
 }
 
 button {
-  background-color: #007bff;
+  background-color: #057909;
   color: white;
-  border: none;
-  padding: 10px;
+  padding: 6px 12px;
+  border-radius: 5px;
   cursor: pointer;
-  margin-bottom: 15px;
+  font-size: 14px;
+  display: inline-block;
+  font-family: 'Helvetica Neue', Arial, sans-serif; /* Consistent font */
 }
 
 button:hover {
-  background-color: #0056b3;
+  background-color: #024405;
 }
 
 .image-container {
@@ -215,11 +226,16 @@ button:hover {
 }
 
 .upload-button {
-  background-color: #007bff;
+  background-color: #057909;
   color: white;
   padding: 6px 12px;
   border-radius: 5px;
   cursor: pointer;
   font-size: 14px;
   display: inline-block;
+  font-family: 'Helvetica Neue', Arial, sans-serif; /* Consistent font */
+}
+
+.upload-button:hover {
+  background-color: #024405;
 }

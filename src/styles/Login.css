@@ -140,3 +140,20 @@
   border-radius: 5px;
   font-size: 14px;
 }
+/* Style for the checkboxes container */
+.login-right .checkbox-group {
+  display: flex;
+  justify-content: center; /* Center the checkboxes horizontally */
+  gap: 80px; /* Space between checkboxes */
+  margin-top: 10px;
+}
+
+.login-right .checkbox-group input {
+  margin-right: 5px; /* Space between checkbox and label */
+}
+
+.login-right .checkbox-group label {
+  font-size: 12px; /* Smaller text for the checkboxes */
+  font-weight: normal; /* Make the text weight normal */
+  margin-bottom: 0; /* Remove bottom margin */
+}
