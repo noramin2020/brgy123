@@ -36,7 +36,7 @@ function UpdateLoginModalForm({ isOpen, onClose, loginData, onUpdate }) {
     }
 
     try {
-      const res = await axios.put(`http://localhost:5000/login/update/${formData.id}`, formData);
+      const res = await axios.put(`https://brgyback.onrender.com/login/update/${formData.id}`, formData);
       alert(res.data.message);
       onUpdate(); // refresh or callback
       onClose();  // close modal

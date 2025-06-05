@@ -52,7 +52,7 @@ function UpdateUserModalForm({ isOpen, onClose, userData, onUpdate }) {
     }
 
     try {
-      const res = await axios.put(`http://localhost:5000/name/update/${formData.id}`, formData);
+      const res = await axios.put(`https://brgyback.onrender.com/name/update/${formData.id}`, formData);
       alert(res.data.message);
       onUpdate(); // refresh or callback
       onClose();  // close modal

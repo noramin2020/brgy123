@@ -14,7 +14,7 @@ function NameRecordsPage({ isSidebarOpen }) {
 
   const fetchNames = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/name");
+      const response = await axios.get("https://brgyback.onrender.com/name");
       setNames(response.data);
     } catch (err) {
       console.error(err);

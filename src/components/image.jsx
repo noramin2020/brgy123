@@ -37,7 +37,7 @@ function Image() {
     formdata.append("isUpdate", images.length > 0);
 
     axios
-      .post("http://localhost:5000/upload", formdata)
+      .post("https://brgyback.onrender.com/upload", formdata)
       .then((res) => {
         setMessage(res.data.message);
         setFile(null);
@@ -53,7 +53,7 @@ function Image() {
   const fetchImages = () => {
     if (!accountId) return;
     axios
-      .get(`http://localhost:5000/images/${accountId}`)
+      .get(`https://brgyback.onrender.com/images/${accountId}`)
       .then((res) => {
         setImages(res.data);
       })

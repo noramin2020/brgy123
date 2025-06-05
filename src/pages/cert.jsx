@@ -40,7 +40,7 @@ const [ZoneNo, setZoneNo] = useState("");
   useEffect(() => {
     if (account_id.trim() === "") return;
   
-    axios.get(`http://localhost:5000/cert/${account_id}`)
+    axios.get(`https://brgyback.onrender.com/cert/${account_id}`)
       .then((res) => {
         const user = res.data[0];
         setFirstName(user.first_name || "");
@@ -67,7 +67,7 @@ const [ZoneNo, setZoneNo] = useState("");
 
     if (!loggedInIDNumber) return;
 
-    axios.get(`http://localhost:5000/user/${loggedInIDNumber}`)
+    axios.get(`https://brgyback.onrender.com/user/${loggedInIDNumber}`)
       .then((res) => {
         if (res.data && res.data.length > 0) {
           const issuer = res.data[0];

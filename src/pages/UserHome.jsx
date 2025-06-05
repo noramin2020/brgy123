@@ -36,7 +36,7 @@ function InfoRecordsPage() {
     }
 
     try {
-      const response = await axios.get(`http://localhost:5000/name/${account_id}`);
+      const response = await axios.get(`https://brgyback.onrender.com/name/${account_id}`);
       if (response.data?.length > 0) {
         setUserData(response.data[0]);
       } else {
@@ -51,9 +51,9 @@ function InfoRecordsPage() {
   const fetchUserPinfo = async () => {
     setLoadingPinfo(true);
     try {
-      const response = await axios.get(`http://localhost:5000/userpinfo/${account_id}`);
+      const response = await axios.get(`https://brgyback.onrender.com/userpinfo/${account_id}`);
       setPinfo(response.data);
-    } catch (err) {
+    } catch (err) {+
       console.error(err);
       setPinfo(null);
     } finally {
@@ -64,7 +64,7 @@ function InfoRecordsPage() {
   const fetchIncomeInfo = async () => {
     setLoadingIncome(true);
     try {
-      const response = await axios.get(`http://localhost:5000/i_info/${account_id}`);
+      const response = await axios.get(`https://brgyback.onrender.com/i_info/${account_id}`);
       setIncomeInfo(response.data);
     } catch (err) {
       console.error(err);
@@ -77,7 +77,7 @@ function InfoRecordsPage() {
   const fetchUserCinfo = async () => {
     setLoadingCinfo(true);
     try {
-      const response = await axios.get(`http://localhost:5000/usercinfo/${account_id}`);
+      const response = await axios.get(`https://brgyback.onrender.com/usercinfo/${account_id}`);
       const data = response.data;
   
       if (Array.isArray(data)) {
@@ -99,7 +99,7 @@ function InfoRecordsPage() {
   const handleSavePinfo = async (formData) => {
     try {
       const payload = { ...formData, account_id };
-      const response = await axios.post("http://localhost:5000/userpinfo/add", payload);
+      const response = await axios.post("https://brgyback.onrender.com/userpinfo/add", payload);
       alert(response.data.message || "Saved successfully");
       fetchUserPinfo();
       setPinfoModalOpen(false);
@@ -112,7 +112,7 @@ function InfoRecordsPage() {
   const handleSaveIncomeInfo = async (formData) => {
     try {
       const payload = { ...formData, account_id };
-      const response = await axios.post("http://localhost:5000/i_info/add", payload);
+      const response = await axios.post("https://brgyback.onrender.com/i_info/add", payload);
       alert(response.data.message || "Saved successfully");
       fetchIncomeInfo();
       setIncomeModalOpen(false);
@@ -125,7 +125,7 @@ function InfoRecordsPage() {
   const handleSaveCinfo = async (formData) => {
     try {
       const payload = { ...formData, account_id };
-      const response = await axios.post("http://localhost:5000/usercinfo/add", payload);
+      const response = await axios.post("https://brgyback.onrender.com/usercinfo/add", payload);
       alert(response.data.message || "Saved successfully");
       fetchUserCinfo(); // ✅ Fix: fetch contact info
       setCinfoModalOpen(false); // ✅ Close contact modal
@@ -137,7 +137,7 @@ function InfoRecordsPage() {
 
   const fetchUserImage = async () => {
     try {
-      const response = await axios.get(`http://localhost:5000/image/${account_id}`);
+      const response = await axios.get(`https://brgyback.onrender.com/image/${account_id}`);
       setUserImage(response.data?.img || null);
     } catch (err) {
       console.error("Error fetching image:", err);
@@ -154,7 +154,7 @@ function InfoRecordsPage() {
       const base64Image = reader.result.split(",")[1];
 
       try {
-        const response = await axios.post("http://localhost:5000/image/add", {
+        const response = await axios.post("https://brgyback.onrender.com/image/add", {
           account_id,
           img: base64Image,
         });

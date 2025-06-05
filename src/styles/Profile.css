@@ -1,0 +1,137 @@
+/* Profile.css */
+
+.profile-wrapper {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    background-color: #f9f9f9;
+  }
+  
+  .input-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+    justify-content: center;
+  }
+  
+  .input-group input {
+    padding: 10px;
+    font-size: 16px;
+    width: 200px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .input-group button {
+    padding: 10px 20px;
+    background-color: #0077cc;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .input-group button:hover {
+    background-color: #005fa3;
+  }
+  
+  .error-message,
+  .loading-message {
+    color: red;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 10px;
+  }
+  
+  .container {
+    background-color: white;
+    border-radius: 8px;
+    padding: 30px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .profile-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .logo1 img,
+  .logo2 img {
+    width: 80px;
+    height: auto;
+  }
+  
+  .profile-content h1 {
+    font-size: 28px;
+    margin-bottom: 5px;
+  }
+  
+  .profile-content h2 {
+    font-size: 22px;
+    font-weight: normal;
+    margin-bottom: 5px;
+  }
+  
+  .profile-content h3 {
+    font-size: 18px;
+    font-weight: normal;
+    margin-bottom: 5px;
+  }
+  
+  .profile-content h4 {
+    font-size: 16px;
+    color: #555;
+  }
+  
+  .section {
+    margin-bottom: 30px;
+  }
+  
+  .section h2 {
+    font-size: 22px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 5px;
+  }
+  
+  .section h3 {
+    font-size: 18px;
+    margin: 4px 0;
+  }
+  
+  .images {
+    margin-bottom: 30px;
+  }
+  
+  .image-gallery {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  .image-gallery img {
+    width: 150px;
+    height: auto;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+  }
+  
+  .issuer-info {
+    text-align: center;
+    margin-top: 40px;
+  }
+  
+  .issuer-info h3 {
+    margin: 5px 0;
+    font-size: 18px;
+  }
+  
+  .issuer-info h2 {
+    font-size: 20px;
+    font-weight: bold;
+  }
+  

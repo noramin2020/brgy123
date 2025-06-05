@@ -17,7 +17,7 @@ const Sidebar = ({ onSidebarToggle }) => {
     if (!IDNumber) return;
 
     // Fetch name info
-    axios.get(`http://localhost:5000/user/${IDNumber}`)
+    axios.get(`https://brgyback.onrender.com/user/${IDNumber}`)
       .then((res) => {
         if (res.data && res.data.length > 0) {
           const login = res.data[0];
@@ -30,12 +30,12 @@ const Sidebar = ({ onSidebarToggle }) => {
       });
 
     // Fetch profile image
-    axios.get(`http://localhost:5000/images/${IDNumber}`)
+    axios.get(`https://brgyback.onrender.com/images/${IDNumber}`)
       .then((res) => {
         if (res.data && res.data.length > 0) {
           // Use the first image as the profile image
           const image = res.data[0];
-          setUserImage(`http://localhost:5000/images/${image.filename}`);
+          setUserImage(`https://brgyback.onrender.com/images/${image.filename}`);
         }
       })
       .catch((err) => {
@@ -90,6 +90,7 @@ const Sidebar = ({ onSidebarToggle }) => {
               <li><Link to="/cert">Cert</Link></li>
               <li><Link to="/indigent">Indigent</Link></li>
               <li><Link to="/Image">Image</Link></li>
+              <li><Link to="/PrintProfile">Profile</Link></li>
               <li><Link to="/Qr">Qr code</Link></li>
             </>
           )}

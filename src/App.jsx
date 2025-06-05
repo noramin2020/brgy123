@@ -14,6 +14,7 @@ import InfoUpdate from "./pages/user/InfoUpdate";
 import Cert from "./pages/cert";
 import Qr from "./pages/DecryptPage";
 import Indigent from "./pages/indigent";
+import Profile from "./pages/Profile";
 import Image from "./components/image";
 
 
@@ -143,6 +144,16 @@ function App() {
             <ProtectedRoute requiredUsertype="any">
               <SidebarLayout>
                 <Image />
+              </SidebarLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/PrintProfile"
+          element={
+            <ProtectedRoute requiredUsertype="any">
+              <SidebarLayout>
+                <Profile />
               </SidebarLayout>
             </ProtectedRoute>
           }

@@ -16,7 +16,7 @@ function LoginRecordsPage({ isSidebarOpen }) {
   const fetchLogins = async () => {
     setLoading(true);
     try {
-      const response = await axios.get("http://localhost:5000/loginview");
+      const response = await axios.get("https://brgyback.onrender.com/loginview");
       setLogins(response.data);
     } catch (err) {
       console.error(err);

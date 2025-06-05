@@ -25,7 +25,7 @@ function NameForm() {
     e.preventDefault();
     try {
       // 1. Send login data first to create the account
-      const resLogin = await axios.post("http://localhost:5000/login/add", formData);
+      const resLogin = await axios.post("https://brgyback.onrender.com/login/add", formData);
       const account_id = resLogin.data.id; // Make sure this is returned from backend
 
       // 2. Send name data with the account_id
@@ -34,7 +34,7 @@ function NameForm() {
         account_id: account_id,
       };
 
-      const resName = await axios.post("http://localhost:5000/name/add", nameData);
+      const resName = await axios.post("https://brgyback.onrender.com/name/add", nameData);
 
       // 3. Success messages
       alert(resLogin.data.message);
